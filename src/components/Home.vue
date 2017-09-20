@@ -18,7 +18,7 @@
 
 <style scoped>
 .container {
-  background: url('/static/login-background.jpeg');
+  background: url('../assets/login-background.jpeg');
   background-position: center;
   background-size: cover;
   background-blend-mode: screen;
