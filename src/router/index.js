@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import CreateContest from '@/components/Contest/CreateContest';
 import Contests from '@/components/Contest/Contests';
+import Contest from '@/components/Contest/Contest';
 import Profile from '@/components/User/Profile';
 import Home from '@/components/Home';
 import Signin from '@/components/User/Signin';
@@ -25,6 +26,11 @@ export default new Router({
       path: '/contests',
       name: 'Contests',
       component: Contests,
+    },
+    {
+      path: '/contests/:id',
+      name: 'Contest',
+      component: Contest,
     },
     {
       path: '/profile',
