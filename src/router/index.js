@@ -1,9 +1,10 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import CreateContest from '@/components/Contest/CreateContest';
+import CreateContest from '@/components/Contest/Create';
 import Contests from '@/components/Contest/Contests';
 import Contest from '@/components/Contest/Contest';
 import Profile from '@/components/User/Profile';
+import JoinContest from '@/components/Contest/Join';
 import Home from '@/components/Home';
 import Signin from '@/components/User/Signin';
 import Signup from '@/components/User/Signup';
@@ -30,7 +31,14 @@ export default new Router({
     {
       path: '/contests/:id',
       name: 'Contest',
+      props: true,
       component: Contest,
+    },
+    {
+      path: '/contests/join/:id',
+      name: 'JoinContest',
+      props: true,
+      component: JoinContest,
     },
     {
       path: '/profile',

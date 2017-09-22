@@ -11,19 +11,8 @@
 
           <!-- start lower layout -->
           <v-layout row wrap>
-
-            <!-- participants pane -->
-            <v-flex xs6>
-              <v-card class="secondary">
-                <v-card-title class="title accent--text">Participants</v-card-title>
-                <v-flex v-for="user in contest.participants" :key="user" xs12>
-                  {{ user }}
-                </v-flex>
-              </v-card>
-            </v-flex>
-            
             <!-- bets pane -->
-            <v-flex xs6>
+            <v-flex xs12>
               <v-card class="secondary">
                 <v-card-title class="title accent--text">Bets</v-card-title>
                 <v-flex v-for="bet in contest.bets" :key="bet" xs12>

@@ -12,7 +12,7 @@
 
             <v-layout row wrap class="white--text">
               <!-- participants pane -->
-              <v-flex d-flex xs6 sm6 md4 class="text-xs-center">
+              <v-flex d-flex xs6 sm6 md4 class="text-xs-center" @click="viewContest(contest.id)">
                 <v-layout row wrap>
                   <v-flex xs12 style="margin: auto">
                     {{ contest.participants.length }} Participants
@@ -22,7 +22,7 @@
               </v-flex>
 
               <!-- bets pane -->
-              <v-flex d-flex xs6 sm6 md4 class="text-xs-center">
+              <v-flex d-flex xs6 sm6 md4 class="text-xs-center" @click="viewContest(contest.id)">
                 <v-layout row wrap>
                   <v-flex xs12 style="margin: auto">
                     {{ contest.bets.length }} Bets
@@ -35,7 +35,7 @@
               <v-flex d-flex xs12 sm12 md4 class="text-xs-center">
                 <v-layout row wrap>
                   <v-flex xs12>
-                    <v-btn flat class="yellow--text">
+                    <v-btn @click="joinContest(contest.id)" flat class="yellow--text">
                       Join
                       <v-icon right dark class="yellow--text">play_circle_outline</v-icon>
                     </v-btn>
@@ -54,43 +54,19 @@
 
 <script>
 export default {
-  data() {
-    return {
-      contests: [],
-    };
+  computed: {
+    contests() {
+      return this.$store.getters.loadedContests;
+    },
   },
-  created() {
-    const newContests = [];
-
-    newContests.push({
-      id: 1,
-      name: 'Contest Week 1',
-      start: new Date(),
-      participants: [1, 2, 3, 4, 5, 6],
-      bets: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-    });
-    newContests.push({
-      id: 2,
-      name: 'Contest Week 2',
-      start: new Date(),
-      participants: [1, 2, 3, 4, 5, 6],
-      bets: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-    });
-    newContests.push({
-      id: 3,
-      name: 'Contest Week 3',
-      start: new Date(),
-      participants: [1, 2, 3, 4, 5, 6],
-      bets: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-    });
-    this.contests = newContests;
+  methods: {
+    joinContest(contestId) {
+      this.$router.push(`/contests/join/${contestId}`);
+      event.preventDefault();
+    },
+    viewContest(contestId) {
+      this.$router.push(`/contests/${contestId}`);
+    },
   },
 };
 </script>
-
-<<style scoped>
-.avatar {
-  width: 36px;
-  height: 36px;
-}
-</style>
