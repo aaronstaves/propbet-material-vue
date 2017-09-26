@@ -2,43 +2,74 @@
   <v-container>
     <v-layout row wrap>
       <v-flex xs12 v-for="contest in contests" :key="contest.id" mt-3 >
-        <v-card hover class="secondary">
-          <v-card-title class="contest-title title accent">
-            {{contest.name}}
-            <v-spacer></v-spacer>
-            {{contest.start}}
-          </v-card-title>
-          <v-container fluid>
+        <v-card hover class="accent">
 
-            <v-layout row wrap class="white--text">
-              <!-- participants pane -->
-              <v-flex d-flex xs6 sm6 md4 class="text-xs-center" @click="viewContest(contest.id)">
+          <v-container fluid>
+            <v-layout row wrap>
+              <!-- title pane -->
+              <v-flex d-flex xs12 sm6 md3 class="mb-3">
                 <v-layout row wrap>
-                  <v-flex xs12 style="margin: auto">
-                    {{ contest.participants.length }} Participants
-                    <v-icon right dark>group</v-icon> 
+                  <v-flex xs12 class="text-xs-center text-sm-left contest-title">
+                    <v-icon>person_pin</v-icon>
+                    {{ contest.name }}
+                  </v-flex>
+                  <v-flex xs12 class="text-xs-center text-sm-left caption">
+                    Created by astaves  
+                  </v-flex>
+                </v-layout>
+              </v-flex>
+
+              <!-- place pane -->
+              <v-flex d-flex xs4 sm3 md2 class="text-xs-center" @click="viewContest(contest.id)">
+                <v-layout row wrap>
+                  <v-flex xs12>
+                    <strong>3rd</strong> / {{ contest.participants.length }}
+                  </v-flex>
+                  <v-flex xs12 class="caption">
+                    Place
+                  </v-flex>
+                  <v-flex xs12>
+                    <v-flex xs4 offset-xs4>
+                      <v-progress-linear v-model="placePercent"></v-progress-linear>
+                    </v-flex>
                   </v-flex>
                 </v-layout>
               </v-flex>
 
               <!-- bets pane -->
-              <v-flex d-flex xs6 sm6 md4 class="text-xs-center" @click="viewContest(contest.id)">
+              <v-flex d-flex xs4 sm3 md2 class="text-xs-center" @click="viewContest(contest.id)">
                 <v-layout row wrap>
-                  <v-flex xs12 style="margin: auto">
-                    {{ contest.bets.length }} Bets
-                    <v-icon right dark>import_contacts</v-icon>
+                  <v-flex xs12>
+                    <strong class="success--text">6</strong> / {{ contest.bets.length }}
+                  </v-flex>
+                  <v-flex xs12 class="caption">
+                    Bets
                   </v-flex>
                 </v-layout>
               </v-flex>
-              
-              <!-- actions pane -->
-              <v-flex d-flex xs12 sm12 md4 class="text-xs-center">
+
+              <!-- unresolved pane -->
+              <v-flex d-flex md2 class="hidden-sm-and-down text-xs-center" @click="viewContest(contest.id)">
                 <v-layout row wrap>
                   <v-flex xs12>
-                    <v-btn @click="joinContest(contest.id)" flat class="yellow--text">
-                      Join
-                      <v-icon right dark class="yellow--text">play_circle_outline</v-icon>
-                    </v-btn>
+                    <strong class="primary--text">4</strong> / {{ contest.bets.length }}
+                  </v-flex>
+                  <v-flex xs12 class="caption">
+                    Unresolved
+                  </v-flex>
+                </v-layout>
+              </v-flex>
+
+              <!-- place pane -->
+              <v-flex d-flex xs4 sm12 md3 class="text-xs-center" @click="viewContest(contest.id)">
+                <v-layout row wrap>
+                  <v-flex xs12 class="hidden-sm-only caption">
+                    12:03 Remaining
+                  </v-flex>
+                  <v-flex xs12>
+                    <v-flex xs12 offset-md4>
+                      <v-progress-linear color-front="success" color-back="error" v-model="placePercent"></v-progress-linear>
+                    </v-flex>
                   </v-flex>
                 </v-layout>
               </v-flex>
@@ -54,6 +85,11 @@
 
 <script>
 export default {
+  data() {
+    return {
+      placePercent: 50,
+    };
+  },
   computed: {
     contests() {
       return this.$store.getters.loadedContests;
@@ -70,3 +106,10 @@ export default {
   },
 };
 </script>
+
+
+<style scoped>
+.contest-title {
+  font-size: 1.2em;
+}
+</style>
