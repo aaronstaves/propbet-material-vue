@@ -99,9 +99,27 @@
                         class="elevation-1"
                       >
                       <template slot="items" scope="props">
-                        <td>{{ props.item.position }}</td>
-                        <td class="text-xs-right">{{ props.item.name }}</td>
-                        <td class="text-xs-right">{{ props.item.score }}</td>
+                        <td class="text-xs-left">{{ props.item.position }}</td>
+                        <td class="text-xs-left">
+                          <!-- 1st place badge/icon -->
+                          <v-icon 
+                            large 
+                            v-badge="
+                              props.item.position === 1 ? 
+                              { 
+                                value: 'done', 
+                                icon: true, 
+                                overlap: true, 
+                                left: true 
+                              } 
+                              : null"
+                            class="grey--text text--lighten-1 success--after"
+                          >
+                            account_circle
+                          </v-icon>
+                          {{ props.item.name }}
+                        </td>
+                        <td class="text-xs-left">{{ props.item.score }}</td>
                       </template>
                     </v-data-table>
                   </v-flex>
@@ -120,10 +138,11 @@
 export default {
   data() {
     return {
+      visible: false,
       headers: [
-        { text: 'position', value: 'position' },
-        { text: 'user', value: 'name' },
-        { text: 'score', value: 'score' },
+        { text: 'position', value: 'position', align: 'left' },
+        { text: 'user', value: 'name', align: 'left' },
+        { text: 'score', value: 'score', align: 'left' },
       ],
       placePercent: 50,
     };

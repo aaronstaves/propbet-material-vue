@@ -44,14 +44,14 @@ export const store = new Vuex.Store({
       id: 2,
       name: 'Contest Week 2',
       start: new Date(),
-      participants: [1, 2, 3, 4, 5, 6],
+      participants,
       bets: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
     },
     {
       id: 3,
       name: 'Contest Week 3',
       start: new Date(),
-      participants: [1, 2, 3, 4, 5, 6],
+      participants,
       bets: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
     }],
     user: {
