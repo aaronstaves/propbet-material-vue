@@ -23,7 +23,7 @@
               <v-flex d-flex xs4 sm3 md2 class="text-xs-center" @click="viewContest(contest.id)">
                 <v-layout row wrap>
                   <v-flex xs12>
-                    <strong>3rd</strong> / {{ contest.participants.length }}
+                    <strong class="primary--text">3rd</strong> / {{ contest.participants.length }}
                   </v-flex>
                   <v-flex xs12 class="caption">
                     Place
@@ -52,7 +52,7 @@
               <v-flex d-flex md2 class="hidden-sm-and-down text-xs-center" @click="viewContest(contest.id)">
                 <v-layout row wrap>
                   <v-flex xs12>
-                    <strong class="primary--text">4</strong> / {{ contest.bets.length }}
+                    <strong>{{ contest.unresolvedBets }} </strong> / {{ contest.bets.length }}
                   </v-flex>
                   <v-flex xs12 class="caption">
                     Unresolved
@@ -63,13 +63,16 @@
               <!-- place pane -->
               <v-flex d-flex xs4 sm12 md3 class="text-xs-center" @click="viewContest(contest.id)">
                 <v-layout row wrap>
-                  <v-flex xs12 class="hidden-sm-only caption">
+                  <v-flex xs12 md8 offset-md2 class="hidden-sm-only caption">
                     12:03 Remaining
                   </v-flex>
                   <v-flex xs12>
-                    <v-flex xs12 offset-md4>
+                    <v-flex xs12 md8 offset-md2>
                       <v-progress-linear color-front="success" color-back="error" v-model="placePercent"></v-progress-linear>
                     </v-flex>
+                  </v-flex>
+                   <v-flex xs12 md8 offset-md2 class="show-sm-only hidden-xs-only caption">
+                    12:03 Remaining
                   </v-flex>
                 </v-layout>
               </v-flex>
