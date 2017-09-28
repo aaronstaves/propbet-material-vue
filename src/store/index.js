@@ -66,22 +66,25 @@ export const store = new Vuex.Store({
   state: {
     loadedContests: [{
       id: 1,
-      name: 'Contest Week 1',
+      title: 'Contest Week 1',
       start: new Date(),
+      end: new Date(),
       participants,
       bets,
     },
     {
       id: 2,
-      name: 'Contest Week 2',
+      title: 'Contest Week 2',
       start: new Date(),
+      end: new Date(),
       participants,
       bets,
     },
     {
       id: 3,
-      name: 'Contest Week 3',
+      title: 'Contest Week 3',
       start: new Date(),
+      end: new Date(),
       participants,
       bets,
     }],
@@ -92,29 +95,20 @@ export const store = new Vuex.Store({
       ],
     },
   },
-  mutations: {},
-  actions: {},
+  mutations: {
+    createContest(state, contest) {
+      state.loadedContests.push(contest);
+    },
+  },
+  actions: {
+    createContest({ commit }, contest) {
+      // Firebase call
+      commit('createContest', contest);
+    },
+  },
   getters: {
     loadedContests(state) {
       // calculated values //
-
-      // loop through all contests
-      state.loadedContests.map((contest) => {
-        // copy contest since we can't alter function param
-        const newContest = contest;
-
-        // count number of unresolved bets
-        const unresolvedBets = contest.bets.reduce((numUnresolved, bet) => {
-          const value = bet.resolved ? 0 : 1;
-          return numUnresolved + value;
-        }, 0);
-
-        // assign new var to our copy
-        newContest.unresolvedBets = unresolvedBets;
-
-        // return copy
-        return newContest;
-      });
       return state.loadedContests.sort((a, b) => a.start > b.start);
     },
     loadedContest(state) {

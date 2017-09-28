@@ -9,12 +9,17 @@
               <!-- title pane -->
               <v-flex d-flex xs12 class="mb-3">
                 <v-layout row wrap>
-                  <v-flex xs12 class="text-xs-center text-sm-left contest-title">
-                    <v-icon x-large class="hidden-xs-only">person_pin</v-icon>
-                    {{ contest.name }}
+                  <v-flex xs12 sm7 class="text-xs-center text-sm-left contest-title">
+                    <v-icon x-large class="hidden-sm-and-down">person_pin</v-icon>
+                    {{ contest.title }}
                   </v-flex>
-                  <v-flex xs12 class="text-xs-center text-sm-left">
-                    Created by astaves  
+                  <v-flex xs12 sm5>
+                    <v-flex xs12 class="text-xs-center text-sm-right">
+                      Start: {{ contest.start | date }} 
+                    </v-flex>
+                    <v-flex xs12 class="text-xs-center text-sm-right">
+                      End: {{ contest.end | date }} 
+                    </v-flex>
                   </v-flex>
                 </v-layout>
               </v-flex>

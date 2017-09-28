@@ -7,15 +7,26 @@
           <v-container fluid>
             <v-layout row wrap>
               <!-- title pane -->
+              <v-flex xs12 class="primary mb-3">
+                <v-layout row wrap>
+                  <v-flex xs12 sm6 class="accent text-xs-center text-sm-left caption">
+                    Start: {{ contest.start | date }} 
+                  </v-flex>
+                  <v-flex xs12 sm6 class="accent text-xs-center text-sm-right caption">
+                    End: {{ contest.end | date }}
+                  </v-flex>
+                </v-layout>
+              </v-flex>
+            </v-layout>
+            <v-layout>
               <v-flex d-flex xs12 sm6 md3 class="mb-3">
                 <v-layout row wrap>
                   <v-flex xs12 class="text-xs-center text-sm-left contest-title">
                     <v-icon>person_pin</v-icon>
-                    {{ contest.name }}
+                    {{ contest.title }}
                   </v-flex>
-                  <v-flex xs12 class="text-xs-center text-sm-left caption">
-                    Created by astaves  
-                  </v-flex>
+
+
                 </v-layout>
               </v-flex>
 
@@ -63,15 +74,12 @@
               <!-- place pane -->
               <v-flex d-flex xs4 sm12 md3 class="text-xs-center" @click="viewContest(contest.id)">
                 <v-layout row wrap>
-                  <v-flex xs12 md8 offset-md2 class="hidden-sm-only caption">
-                    12:03 Remaining
-                  </v-flex>
                   <v-flex xs12>
                     <v-flex xs12 md8 offset-md2>
                       <v-progress-linear color-front="success" color-back="error" v-model="placePercent"></v-progress-linear>
                     </v-flex>
                   </v-flex>
-                   <v-flex xs12 md8 offset-md2 class="show-sm-only hidden-xs-only caption">
+                   <v-flex xs12 md8 offset-md2 class="caption">
                     12:03 Remaining
                   </v-flex>
                 </v-layout>
