@@ -1,7 +1,13 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import * as firebase from 'firebase';
 
 Vue.use(Vuex);
+
+// disable function param reassigns since that's kind
+// of what Vuex does
+
+/* eslint-disable no-param-reassign */
 
 const participants = [
   {
@@ -88,22 +94,46 @@ export const store = new Vuex.Store({
       participants,
       bets,
     }],
-    user: {
-      id: 1,
-      joinedContests: [
-        1,
-      ],
-    },
+    user: null,
   },
   mutations: {
     createContest(state, contest) {
       state.loadedContests.push(contest);
     },
+    setUser(state, user) {
+      state.user = user;
+    },
   },
   actions: {
-    createContest({ commit }, contest) {
+    createContest({ commit }, payload) {
       // Firebase call
-      commit('createContest', contest);
+      commit('createContest', payload);
+    },
+    signupUser({ commit }, payload) {
+      firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
+        .then((user) => {
+          const newUser = {
+            id: user.uid,
+            joinedContests: [],
+          };
+          commit('setUser', newUser);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    signinUser({ commit }, payload) {
+      firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
+      .then((user) => {
+        const newUser = {
+          id: user.uid,
+          joinedContests: [],
+        };
+        commit('setUser', newUser);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
     },
   },
   getters: {
@@ -113,6 +143,9 @@ export const store = new Vuex.Store({
     },
     loadedContest(state) {
       return contestId => state.loadedContests.find(contest => contest.id === contestId);
+    },
+    user(state) {
+      return state.user;
     },
   },
 

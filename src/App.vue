@@ -22,7 +22,7 @@
       </v-list>
       <v-list class="pt-0" dense>
         <v-divider></v-divider>
-        <v-list-tile v-for="item in items" :key="item.title" :to="item.link">
+        <v-list-tile v-for="item in menuItems" :key="item.title" :to="item.link">
           <v-list-tile-action>
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-tile-action>
@@ -41,7 +41,7 @@
         </router-link>
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-xs-only">
-        <v-btn v-for="item in items"
+        <v-btn v-for="item in menuItems"
           :key="item.title"
           flat
           :to="item.link"
@@ -62,15 +62,25 @@
     data() {
       return {
         drawer: false,
-        items: [
-          { title: 'View Contests', icon: 'group', link: '/contests' },
-          { title: 'Create Contest', icon: 'group_add', link: '/contest/create' },
-          { title: 'Profile', icon: 'person', link: '/profile' },
+      };
+    },
+    computed: {
+      menuItems() {
+        if (this.userIsAuthenticated) {
+          return [
+            { title: 'View Contests', icon: 'group', link: '/contests' },
+            { title: 'Create Contest', icon: 'group_add', link: '/contest/create' },
+            { title: 'Profile', icon: 'person', link: '/profile' },
+          ];
+        }
+        return [
           { title: 'Sign up', icon: 'face', link: '/signup' },
           { title: 'Sign in', icon: 'lock_open', link: '/signin' },
-
-        ],
-      };
+        ];
+      },
+      userIsAuthenticated() {
+        return (this.$store.getters.user !== null && this.$store.getters.user !== undefined);
+      },
     },
   };
 </script>

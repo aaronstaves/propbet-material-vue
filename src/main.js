@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuetify from 'vuetify';
+import * as firebase from 'firebase';
 import './stylus/main.styl';
 import App from './App';
 import router from './router';
@@ -16,4 +17,14 @@ new Vue({
   router,
   store,
   render: h => h(App),
+  created() {
+    firebase.initializeApp({
+      apiKey: 'AIzaSyDmvWRAxRP4SqHyZDsE_6qcK4ArfytCdC4',
+      authDomain: 'material-propbet.firebaseapp.com',
+      databaseURL: 'https://material-propbet.firebaseio.com',
+      projectId: 'material-propbet',
+      storageBucket: 'material-propbet.appspot.com',
+      messagingSenderId: '678935634403',
+    });
+  },
 });
