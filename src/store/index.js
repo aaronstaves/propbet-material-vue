@@ -95,13 +95,24 @@ export const store = new Vuex.Store({
       bets,
     }],
     user: null,
+    loading: false,
+    error: null,
   },
   mutations: {
-    createContest(state, contest) {
-      state.loadedContests.push(contest);
+    createContest(state, payload) {
+      state.loadedContests.push(payload);
     },
-    setUser(state, user) {
-      state.user = user;
+    setUser(state, payload) {
+      state.user = payload;
+    },
+    setLoading(state, payload) {
+      state.loading = payload;
+    },
+    setError(state, payload) {
+      state.error = payload;
+    },
+    clearError(state) {
+      state.error = null;
     },
   },
   actions: {
@@ -110,6 +121,8 @@ export const store = new Vuex.Store({
       commit('createContest', payload);
     },
     signupUser({ commit }, payload) {
+      commit('setLoading', true);
+      commit('clearError');
       firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
         .then((user) => {
           const newUser = {
@@ -117,12 +130,16 @@ export const store = new Vuex.Store({
             joinedContests: [],
           };
           commit('setUser', newUser);
+          commit('setLoading', false);
         })
         .catch((error) => {
-          console.log(error);
+          commit('setLoading', false);
+          commit('setError', error);
         });
     },
     signinUser({ commit }, payload) {
+      commit('setLoading', true);
+      commit('clearError');
       firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
       .then((user) => {
         const newUser = {
@@ -130,10 +147,15 @@ export const store = new Vuex.Store({
           joinedContests: [],
         };
         commit('setUser', newUser);
+        commit('setLoading', false);
       })
       .catch((error) => {
-        console.log(error);
+        commit('setError', error);
+        commit('setLoading', false);
       });
+    },
+    clearError({ commit }) {
+      commit('clearError');
     },
   },
   getters: {
@@ -146,6 +168,12 @@ export const store = new Vuex.Store({
     },
     user(state) {
       return state.user;
+    },
+    loading(state) {
+      return state.loading;
+    },
+    error(state) {
+      return state.error;
     },
   },
 
