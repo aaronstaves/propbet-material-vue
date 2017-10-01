@@ -28,5 +28,11 @@ new Vue({
       storageBucket: 'material-propbet.appspot.com',
       messagingSenderId: '678935634403',
     });
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        this.$store.dispatch('setUserFromFB', user);
+      }
+    });
+    this.$store.dispatch('loadContests');
   },
 });

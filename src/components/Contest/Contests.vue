@@ -1,6 +1,32 @@
 <template>
   <v-container>
-    <v-layout row wrap>
+    <v-layout v-if="loading">
+      <v-flex xs12 class="text-xs-center">
+        <v-progress-circular 
+          indeterminate 
+          class="primary--text"
+          :width="7"
+          :size="70"
+        ></v-progress-circular>
+      </v-flex>
+    </v-layout> 
+
+
+    <v-layout row wrap v-if="!loading">
+      <!-- nothing found -->
+      <v-flex xs12 v-if="!loading && contests.length === 0">
+        <v-card hover class="accent">
+          <v-container fluid>
+            <v-layout row wrap>
+              <v-flex xs12 class="text-xs-center contest-title">
+                No contests found
+              </v-flex>
+            </v-layout>
+          </v-container>
+        </v-card>
+      </v-flex>
+
+      <!-- contest list -->
       <v-flex xs12 v-for="contest in contests" :key="contest.id" mt-3 >
         <v-card hover class="accent">
 
@@ -104,6 +130,9 @@ export default {
   computed: {
     contests() {
       return this.$store.getters.loadedContests;
+    },
+    loading() {
+      return this.$store.getters.loading;
     },
   },
   methods: {

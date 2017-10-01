@@ -4,10 +4,10 @@ import CreateContest from '@/components/Contest/Create';
 import Contests from '@/components/Contest/Contests';
 import Contest from '@/components/Contest/Contest';
 import Profile from '@/components/User/Profile';
-import JoinContest from '@/components/Contest/Join';
 import Home from '@/components/Home';
 import Signin from '@/components/User/Signin';
 import Signup from '@/components/User/Signup';
+import AuthGuard from '@/router/auth-guard';
 
 Vue.use(Router);
 
@@ -22,28 +22,26 @@ export default new Router({
       path: '/contest/create',
       name: 'CreateContest',
       component: CreateContest,
+      beforeEnter: AuthGuard,
     },
     {
       path: '/contests',
       name: 'Contests',
       component: Contests,
+      beforeEnter: AuthGuard,
     },
     {
       path: '/contests/:id',
       name: 'Contest',
       props: true,
       component: Contest,
-    },
-    {
-      path: '/contests/join/:id',
-      name: 'JoinContest',
-      props: true,
-      component: JoinContest,
+      beforeEnter: AuthGuard,
     },
     {
       path: '/profile',
       name: 'Profile',
       component: Profile,
+      beforeEnter: AuthGuard,
     },
     {
       path: '/signin',

@@ -155,7 +155,7 @@ export default {
   props: ['id'],
   computed: {
     contest() {
-      return this.$store.getters.loadedContest(parseInt(this.id, 10));
+      return this.$store.getters.loadedContest(this.id);
     },
   },
 };

@@ -123,7 +123,6 @@ export default {
       }
 
       const contestData = {
-        id: parseInt(Math.random(100) * 100, 10),
         title: this.title,
         start: this.contestStart,
         end: this.contestEnd,

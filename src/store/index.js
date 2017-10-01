@@ -9,91 +9,9 @@ Vue.use(Vuex);
 
 /* eslint-disable no-param-reassign */
 
-const participants = [
-  {
-    name: 'astaves',
-    userId: 1,
-  },
-  {
-    name: 'logan11',
-
-    userId: 2,
-  },
-  {
-    name: 'ss',
-    userId: 3,
-  },
-  {
-    name: 'kingthursday',
-    userId: 4,
-  },
-  {
-    name: 'deepcrow',
-    userId: 5,
-  },
-];
-
-const bets = [
-  {
-    text: 'Halftime Song Length (seconds)',
-    type: 'over-under',
-    break: 150,
-    value: 143,
-    resolved: true,
-  },
-  {
-    text: 'Aaron Rodgers 300+ Passing',
-    type: 'over-under',
-    break: 300,
-    value: 100,
-    resolved: false,
-  },
-  {
-    text: 'First Halftime Song',
-    type: 'choice',
-    choices: [
-      'Poker Face',
-      'Just Dance',
-      'Bad Romance',
-      'Other',
-    ],
-    value: null,
-    resolved: false,
-  },
-  {
-    text: 'Combined Total Score',
-    type: 'value',
-    value: 12,
-    resolved: false,
-  },
-];
-
 export const store = new Vuex.Store({
   state: {
-    loadedContests: [{
-      id: 1,
-      title: 'Contest Week 1',
-      start: new Date(),
-      end: new Date(),
-      participants,
-      bets,
-    },
-    {
-      id: 2,
-      title: 'Contest Week 2',
-      start: new Date(),
-      end: new Date(),
-      participants,
-      bets,
-    },
-    {
-      id: 3,
-      title: 'Contest Week 3',
-      start: new Date(),
-      end: new Date(),
-      participants,
-      bets,
-    }],
+    loadedContests: [],
     user: null,
     loading: false,
     error: null,
@@ -101,6 +19,9 @@ export const store = new Vuex.Store({
   mutations: {
     createContest(state, payload) {
       state.loadedContests.push(payload);
+    },
+    setLoadedContests(state, payload) {
+      state.loadedContests = payload;
     },
     setUser(state, payload) {
       state.user = payload;
@@ -116,9 +37,50 @@ export const store = new Vuex.Store({
     },
   },
   actions: {
-    createContest({ commit }, payload) {
-      // Firebase call
-      commit('createContest', payload);
+    loadContests({ commit }) {
+      commit('setLoading', true);
+      firebase.database().ref('contests').once('value')
+        .then((data) => {
+          const obj = data.val();
+          const contests = Object.keys(obj).map(key => (
+            {
+              id: key,
+              title: obj[key].title,
+              start: new Date(obj[key].start),
+              end: new Date(obj[key].end),
+              bets: obj[key].bets || [],
+              participants: obj[key].particpants || [],
+              creatorId: obj[key].creatorId,
+            }
+          ));
+          commit('setLoadedContests', contests);
+          commit('setLoading', false);
+        })
+        .catch((error) => {
+          console.dir(error);
+          commit('setLoading', false);
+        });
+    },
+    createContest({ commit, getters }, payload) {
+      const contestData = {
+        title: payload.title,
+        start: payload.start.toISOString(),
+        end: payload.end.toISOString(),
+        bets: [],
+        participants: [],
+        creatorId: getters.user.id,
+      };
+
+      firebase.database().ref('contests').push(contestData)
+        .then((response) => {
+          commit('createContest', {
+            ...contestData,
+            id: response.key,
+          });
+        })
+        .catch((error) => {
+          console.dir(error);
+        });
     },
     signupUser({ commit }, payload) {
       commit('setLoading', true);
@@ -127,7 +89,6 @@ export const store = new Vuex.Store({
         .then((user) => {
           const newUser = {
             id: user.uid,
-            joinedContests: [],
           };
           commit('setUser', newUser);
           commit('setLoading', false);
@@ -153,6 +114,16 @@ export const store = new Vuex.Store({
         commit('setError', error);
         commit('setLoading', false);
       });
+    },
+    setUserFromFB({ commit }, payload) {
+      commit('setUser', {
+        id: payload.uid,
+        joinedContests: [],
+      });
+    },
+    logout({ commit }) {
+      firebase.auth().signOut();
+      commit('setUser', null);
     },
     clearError({ commit }) {
       commit('clearError');
