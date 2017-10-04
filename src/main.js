@@ -31,8 +31,8 @@ new Vue({
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         this.$store.dispatch('setUserFromFB', user);
+        this.$store.dispatch('loadContests');
       }
     });
-    this.$store.dispatch('loadContests');
   },
 });
