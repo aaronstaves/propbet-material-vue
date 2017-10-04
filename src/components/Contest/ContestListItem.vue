@@ -24,8 +24,6 @@
                   <v-icon>person_pin</v-icon>
                   {{ contest.title }}
                 </v-flex>
-
-
               </v-layout>
             </v-flex>
 

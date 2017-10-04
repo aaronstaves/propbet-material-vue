@@ -15,16 +15,16 @@
     </v-flex>
     <!-- contest list -->
     <v-flex xs12 v-for="contest in contests" :key="contest.id" mt-3 >
-      <contest-item :contest="contest"></contest-item>
+      <contest-list-item :contest="contest"></contest-list-item>
     </v-flex>
   </v-layout>
 </template>
 
 <script>
-import ContestItem from './ContestItem';
+import ContestListItem from './ContestListItem';
 
 export default {
-  components: { ContestItem },
+  components: { ContestListItem },
   computed: {
     contests() {
       return this.$store.getters.loadedContests;
