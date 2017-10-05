@@ -69,5 +69,20 @@ export default {
     loadedContest(state) {
       return contestId => state.loadedContests.find(contest => contest.id === contestId);
     },
+    unresolvedBets(state, getters) {
+      return contestId => getters.loadedContest(contestId).bets.filter(bet => bet.resolved).length;
+    },
+    remainingTimePercent(state, getters) {
+      return (contestId) => {
+        const contest = getters.loadedContest(contestId);
+        const now = new Date();
+        if (contest.start > now) {
+          return 100;
+        } else if (contest.end < now) {
+          return 0;
+        }
+        return 50;
+      };
+    },
   },
 };

@@ -60,7 +60,7 @@
             <v-flex d-flex md2 class="hidden-sm-and-down text-xs-center" @click="viewContest(contest.id)">
               <v-layout row wrap>
                 <v-flex xs12>
-                  <strong>{{ contest.unresolvedBets }} </strong> / {{ contest.bets.length }}
+                  <strong>{{ unresolvedBets }} </strong> / {{ contest.bets.length }}
                 </v-flex>
                 <v-flex xs12 class="caption">
                   Unresolved
@@ -73,7 +73,7 @@
               <v-layout row wrap>
                 <v-flex xs12>
                   <v-flex xs12 md8 offset-md2>
-                    <v-progress-linear color-front="success" color-back="error" v-model="placePercent"></v-progress-linear>
+                    <v-progress-linear color-front="success" color-back="error" v-model="remainingTimePercent"></v-progress-linear>
                   </v-flex>
                 </v-flex>
                   <v-flex xs12 md8 offset-md2 class="caption">
@@ -96,6 +96,14 @@ export default {
     return {
       placePercent: 50,
     };
+  },
+  computed: {
+    unresolvedBets() {
+      return this.$store.getters.unresolvedBets(this.contest.id);
+    },
+    remainingTimePercent() {
+      return this.$store.getters.remainingTimePercent(this.contest.id);
+    },
   },
   methods: {
     viewContest(contestId) {
