@@ -69,7 +69,7 @@
   </v-container>
 </template>
 
-<<script>
+<script>
 export default {
   data() {
     return {
@@ -88,35 +88,60 @@ export default {
       return this.title !== '';
     },
     contestStart() {
-      const date = new Date(this.startDate);
+      const { year, month, day } = this.$_contestCreate_parseDate(this.startDate);
+      const { hours, minutes } = this.$_contestCreate_parseTime(this.startTime);
 
-      if (typeof this.startTime === 'string') {
-        const timeRegex = this.startTime.match(/^(\d+):(\d+)(am|pm)$/);
-        const offset = timeRegex[3] === 'pm' ? 12 : 0;
-        date.setHours(parseInt(timeRegex[1], 0) + offset);
-        date.setMinutes(timeRegex[2]);
-      } else {
-        date.setHours(this.startTime.getHours());
-        date.setMinutes(this.startTime.getMinutes());
-      }
-      return date;
+      return new Date(year, month, day, hours, minutes);
     },
     contestEnd() {
-      const date = new Date(this.endDate);
+      const { year, month, day } = this.$_contestCreate_parseDate(this.endDate);
+      const { hours, minutes } = this.$_contestCreate_parseTime(this.endTime);
 
-      if (typeof this.endDate === 'string') {
-        const timeRegex = this.endTime.match(/^(\d+):(\d+)(am|pm)$/);
-        const offset = timeRegex[3] === 'pm' ? 12 : 0;
-        date.setHours(parseInt(timeRegex[1], 0) + offset);
-        date.setMinutes(timeRegex[2]);
-      } else {
-        date.setHours(this.endDate.getHours());
-        date.setMinutes(this.endDate.getMinutes());
-      }
-      return date;
+      return new Date(year, month, day, hours, minutes);
     },
   },
   methods: {
+    $_contestCreate_parseDate(date) {
+      if (typeof date === 'object') {
+        return {
+          year: date.getFullYear(),
+          month: date.getMonth(),
+          day: date.getDate(),
+        };
+      }
+      const dateRegex = date.match(/^(\d+)-(\d+)-(\d+)$/);
+      return {
+        year: (parseInt(dateRegex[1], 0)),
+        month: (parseInt(dateRegex[2], 0) - 1),
+        day: (parseInt(dateRegex[3], 0)),
+      };
+    },
+    $_contestCreate_parseTime(time) {
+      if (typeof time === 'object') {
+        return {
+          hours: time.getHours(),
+          minutes: time.getMinutes(),
+        };
+      }
+      const timeRegex = time.match(/^(\d+):(\d+)(am|pm)$/);
+      const ampm = timeRegex[3];
+      const minutes = parseInt(timeRegex[2], 0);
+      let hours = parseInt(timeRegex[1], 0);
+
+      if (ampm === 'am' && hours === 12) {
+        hours = 0;
+      } else if (ampm === 'pm' && hours === 12) {
+        hours = 12;
+      } else if (ampm === 'pm') {
+        hours += 12;
+      }
+
+
+      return {
+        hours,
+        minutes,
+      };
+    },
     onCreateContest() {
       if (!this.formIsValid) {
         return;
