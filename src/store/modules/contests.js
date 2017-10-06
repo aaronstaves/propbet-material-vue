@@ -72,6 +72,16 @@ export default {
     unresolvedBets(state, getters) {
       return contestId => getters.loadedContest(contestId).bets.filter(bet => bet.resolved).length;
     },
+    userPosition(state, getters) {
+      return (contestId) => {
+        const contest = getters.loadedContest(contestId);
+        const participants = contest.participants;
+        if (participants.find(user => user === state.user.id)) {
+          return 1;
+        }
+        return 0;
+      };
+    },
     remainingTimePercent(state, getters) {
       return (contestId) => {
         const contest = getters.loadedContest(contestId);
