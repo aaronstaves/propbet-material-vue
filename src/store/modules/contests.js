@@ -76,12 +76,42 @@ export default {
       return (contestId) => {
         const contest = getters.loadedContest(contestId);
         const now = new Date();
+
+        // either started or ended
         if (contest.start > now) {
           return 100;
         } else if (contest.end < now) {
           return 0;
         }
-        return 50;
+
+        // contest is happening now!
+        const totalTime = contest.end - contest.start;
+        const remainingTime = contest.end - now;
+
+        return parseInt((remainingTime / totalTime) * 100, 10);
+      };
+    },
+    remainingTimeDisplay(state, getters) {
+      return (contestId) => {
+        const contest = getters.loadedContest(contestId);
+        const now = new Date();
+
+        // either started or ended
+        if (contest.start > now) {
+          return 'Hasn\'t Started';
+        } else if (contest.end < now) {
+          return 'Ended';
+        }
+
+        // contest is happening now!
+        const remainingTime = contest.end - now;
+        const hours = parseInt(remainingTime / 3600000, 10);
+        let minutes = parseInt((remainingTime - (hours * 3600000)) / 1000 / 60, 10);
+        if (minutes < 10) {
+          minutes = `0${minutes}`;
+        }
+
+        return `${hours}:${minutes}`;
       };
     },
   },

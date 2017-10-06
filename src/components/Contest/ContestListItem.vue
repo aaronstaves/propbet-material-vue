@@ -77,7 +77,7 @@
                   </v-flex>
                 </v-flex>
                   <v-flex xs12 md8 offset-md2 class="caption">
-                  12:03 Remaining
+                    {{ remainingTimeDisplay }}
                 </v-flex>
               </v-layout>
             </v-flex>
@@ -103,6 +103,9 @@ export default {
     },
     remainingTimePercent() {
       return this.$store.getters.remainingTimePercent(this.contest.id);
+    },
+    remainingTimeDisplay() {
+      return this.$store.getters.remainingTimeDisplay(this.contest.id);
     },
   },
   methods: {
