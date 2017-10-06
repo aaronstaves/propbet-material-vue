@@ -37,7 +37,6 @@
             </v-flex>
           </v-layout>
 
-
           <!-- end date and time -->
           <v-layout row>
             <v-flex xs12 sm6 offset-sm3 class="mt-4">
@@ -70,6 +69,8 @@
 </template>
 
 <script>
+import moment from 'moment';
+
 export default {
   data() {
     return {
@@ -88,60 +89,33 @@ export default {
       return this.title !== '';
     },
     contestStart() {
-      const { year, month, day } = this.$_contestCreate_parseDate(this.startDate);
-      const { hours, minutes } = this.$_contestCreate_parseTime(this.startTime);
+      let dateStr = this.startDate;
+      let timeStr = this.startTime;
 
-      return new Date(year, month, day, hours, minutes);
+      // date object, get string
+      if (typeof dateStr === 'object') {
+        dateStr = `${this.startDate.getFullYear()}-${this.startDate.getMonth() + 1}-${this.startDate.getDate()}`;
+      }
+      if (typeof timeStr === 'object') {
+        timeStr = `${this.startTime.getHours()}:${this.startTime.getMinutes()} ${this.startTime.getHours >= 12 ? 'pm' : 'am'}`;
+      }
+      return moment(`${dateStr} ${timeStr}`, 'YYYY-MM-DD hh:mm a');
     },
     contestEnd() {
-      const { year, month, day } = this.$_contestCreate_parseDate(this.endDate);
-      const { hours, minutes } = this.$_contestCreate_parseTime(this.endTime);
+      let dateStr = this.endDate;
+      let timeStr = this.endTime;
 
-      return new Date(year, month, day, hours, minutes);
+      // date object, get string
+      if (typeof dateStr === 'object') {
+        dateStr = `${this.endDate.getFullYear()}-${this.endDate.getMonth() + 1}-${this.endDate.getDate()}`;
+      }
+      if (typeof timeStr === 'object') {
+        timeStr = `${this.endTime.getHours()}:${this.endTime.getMinutes()} ${this.endTime.getHours >= 12 ? 'pm' : 'am'}`;
+      }
+      return moment(`${dateStr} ${timeStr}`, 'YYYY-MM-DD hh:mm a');
     },
   },
   methods: {
-    $_contestCreate_parseDate(date) {
-      if (typeof date === 'object') {
-        return {
-          year: date.getFullYear(),
-          month: date.getMonth(),
-          day: date.getDate(),
-        };
-      }
-      const dateRegex = date.match(/^(\d+)-(\d+)-(\d+)$/);
-      return {
-        year: (parseInt(dateRegex[1], 0)),
-        month: (parseInt(dateRegex[2], 0) - 1),
-        day: (parseInt(dateRegex[3], 0)),
-      };
-    },
-    $_contestCreate_parseTime(time) {
-      if (typeof time === 'object') {
-        return {
-          hours: time.getHours(),
-          minutes: time.getMinutes(),
-        };
-      }
-      const timeRegex = time.match(/^(\d+):(\d+)(am|pm)$/);
-      const ampm = timeRegex[3];
-      const minutes = parseInt(timeRegex[2], 0);
-      let hours = parseInt(timeRegex[1], 0);
-
-      if (ampm === 'am' && hours === 12) {
-        hours = 0;
-      } else if (ampm === 'pm' && hours === 12) {
-        hours = 12;
-      } else if (ampm === 'pm') {
-        hours += 12;
-      }
-
-
-      return {
-        hours,
-        minutes,
-      };
-    },
     onCreateContest() {
       if (!this.formIsValid) {
         return;
