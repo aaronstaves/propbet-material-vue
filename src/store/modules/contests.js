@@ -60,6 +60,13 @@ export default {
           console.dir(error);
         });
     },
+    joinContest({ commit, getters }, { contestId, userId }) {
+      const contest = getters.loadedContest(contestId);
+      const participants = contest.participants;
+      if (!participants.find(user => user === userId)) {
+        console.log(`joining as user ${userId}`);
+      }
+    },
   },
   getters: {
     loadedContests(state) {
