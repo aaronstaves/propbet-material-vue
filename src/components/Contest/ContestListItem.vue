@@ -142,10 +142,7 @@ export default {
       this.$router.push(`/contests/${contestId}`);
     },
     joinContest(contestId) {
-      this.$store.dispatch('joinContest', {
-        contestId,
-        userId: this.$store.getters.user.id,
-      });
+      this.$router.push(`/contests/${contestId}`);
     },
   },
 };

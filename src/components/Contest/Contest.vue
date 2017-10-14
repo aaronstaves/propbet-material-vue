@@ -28,7 +28,7 @@
               <v-flex d-flex xs4 md3 class="header-data text-xs-center">
                 <v-layout row wrap>
                   <v-flex xs12>
-                    <strong class="primary--text">3rd</strong> / {{ contest.participants.length }}
+                    <strong class="primary--text">{{ userPosition }}</strong> / {{ contest.participants.length }}
                   </v-flex>
                   <v-flex xs12 class="header-caption">
                     Place
@@ -41,7 +41,7 @@
               <v-flex d-flex xs4 md3 class="header-data text-xs-center">
                 <v-layout row wrap>
                   <v-flex xs12>
-                    <strong class="success--text">6</strong> / {{ contest.bets.length }}
+                    <strong class="success--text">{{ contest.bets.length }} </strong> / {{ contest.bets.length }}
                   </v-flex>
                   <v-flex xs12 class="header-caption">
                     Bets
@@ -53,7 +53,7 @@
               <v-flex d-flex xs4 md3 class="header-data text-xs-center">
                 <v-layout row wrap>
                   <v-flex xs12>
-                    <strong>4</strong> / {{ contest.bets.length }}
+                    <strong>{{ unresolvedBets }}</strong> / {{ contest.bets.length }}
                   </v-flex>
                   <v-flex xs12 class="header-caption">
                     Unresolved
@@ -65,13 +65,13 @@
               <v-flex d-flex xs12 md3 class="header-data text-xs-center">
                 <v-layout row wrap>
                   <v-flex xs12 class="hidden-sm-and-down">
-                      12:03 Remaining
+                    {{ remainingTimeDisplay}}
                   </v-flex>
                  <v-flex xs12 class="header-caption hidden-md-and-up mt-3">
-                      12:03 Remaining
+                   {{ remainingTimeDisplay }}
                   </v-flex>
                   <v-flex xs8 offset-xs2 md12>
-                      <v-progress-linear color-front="success" color-back="error" v-model="placePercent"></v-progress-linear>
+                      <v-progress-linear color-front="success" color-back="error" v-model="remainingTimePercent"></v-progress-linear>
                   </v-flex>
                 </v-layout>
               </v-flex>              
@@ -149,13 +149,24 @@ export default {
         { text: 'user', value: 'name', align: 'left' },
         { text: 'score', value: 'score', align: 'left' },
       ],
-      placePercent: 50,
     };
   },
   props: ['id'],
   computed: {
     contest() {
       return this.$store.getters.loadedContest(this.id);
+    },
+    unresolvedBets() {
+      return this.$store.getters.unresolvedBets(this.contest.id);
+    },
+    userPosition() {
+      return this.$store.getters.userPosition(this.contest.id);
+    },
+    remainingTimePercent() {
+      return this.$store.getters.remainingTimePercent(this.contest.id);
+    },
+    remainingTimeDisplay() {
+      return this.$store.getters.remainingTimeDisplay(this.contest.id);
     },
   },
 };
