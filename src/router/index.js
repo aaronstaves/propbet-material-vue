@@ -28,14 +28,12 @@ export default new Router({
       path: '/contests',
       name: 'Contests',
       component: Contests,
-      beforeEnter: AuthGuard,
     },
     {
       path: '/contests/:id',
       name: 'Contest',
       props: true,
       component: Contest,
-      beforeEnter: AuthGuard,
     },
     {
       path: '/profile',
