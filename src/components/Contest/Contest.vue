@@ -1,6 +1,16 @@
 <template>
   <v-container>
-    <v-layout row wrap>
+    <v-layout v-if="loading">
+      <v-flex xs12 class="text-xs-center">
+        <v-progress-circular 
+          indeterminate 
+          class="primary--text"
+          :width="4"
+          :size="70"
+        ></v-progress-circular>
+      </v-flex>
+    </v-layout> 
+    <v-layout row wrap v-else>
       <v-flex xs12 mt-3 >
         <v-card hover class="accent">
 
@@ -10,6 +20,9 @@
               <v-flex d-flex xs12 class="mb-3">
                 <v-layout row wrap>
                   <v-flex xs12 sm7 class="text-xs-center text-sm-left contest-title">
+                    <template v-if="true">
+                      <app-edit-contest-details-dialog :contest="contest"></app-edit-contest-details-dialog>
+                    </template>
                     <v-icon x-large class="hidden-sm-and-down">person_pin</v-icon>
                     {{ contest.title }}
                   </v-flex>
@@ -153,8 +166,15 @@ export default {
   },
   props: ['id'],
   computed: {
+    loading() {
+      // account for case when contest is still loading
+      if (this.contest === null || this.contest === undefined) {
+        return true;
+      }
+      return this.$store.getters.loading;
+    },
     contest() {
-      return this.$store.getters.loadedContest(this.id);
+      return this.$store.getters.loadedContests.find(contest => contest.id === this.id);
     },
     unresolvedBets() {
       return this.$store.getters.unresolvedBets(this.contest.id);
@@ -167,6 +187,15 @@ export default {
     },
     remainingTimeDisplay() {
       return this.$store.getters.remainingTimeDisplay(this.contest.id);
+    },
+    userIsAuthenticated() {
+      return this.$store.getters.user !== null && this.$store.getters.user !== undefined;
+    },
+    userIsCreator() {
+      if (!this.userIsAuthenticated) {
+        return false;
+      }
+      return this.$store.getters.user.id === this.contest.creatorId;
     },
   },
 };

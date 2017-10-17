@@ -7,10 +7,12 @@ import router from './router';
 import { store } from './store';
 import DateFilter from './filters/date';
 import AlertCmp from './components/Shared/Alert';
+import EditContestDetailsDoalog from './components/Contest/Edit/EditContestDetailsDialog';
 
 Vue.use(Vuetify);
 Vue.filter('date', DateFilter);
 Vue.component('app-alert', AlertCmp);
+Vue.component('app-edit-contest-details-dialog', EditContestDetailsDoalog);
 Vue.config.productionTip = false;
 
 /* eslint-disable no-new */

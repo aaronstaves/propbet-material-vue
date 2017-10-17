@@ -10,6 +10,19 @@ export default {
     createContest(state, payload) {
       state.loadedContests.push(payload);
     },
+    updateContest(state, payload) {
+      const contest = state.loadedContests.find(updateContest => updateContest.id === payload.id);
+
+      if (payload.title) {
+        contest.title = payload.title;
+      }
+      if (payload.start) {
+        contest.start = payload.start;
+      }
+      if (payload.end) {
+        contest.end = payload.end;
+      }
+    },
     setLoadedContests(state, payload) {
       state.loadedContests = payload;
     },
@@ -58,6 +71,29 @@ export default {
         })
         .catch((error) => {
           console.dir(error);
+        });
+    },
+    updateContest({ commit }, payload) {
+      commit('setLoading', true);
+      const updateObj = {};
+      if (payload.title) {
+        updateObj.title = payload.title;
+      }
+      if (payload.start) {
+        updateObj.start = payload.start;
+      }
+      if (payload.end) {
+        updateObj.end = payload.end;
+      }
+
+      firebase.database().ref('contests').child(payload.id).update(updateObj)
+        .then(() => {
+          commit('setLoading', false);
+          commit('updateContest', payload);
+        })
+        .catch((error) => {
+          console.dir(error);
+          commit('setLoading', false);
         });
     },
     joinContest({ commit, getters }, { contestId, userId }) {
